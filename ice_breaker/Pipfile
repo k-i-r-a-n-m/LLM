@@ -1,0 +1,20 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+langchain = "*"
+langchain-openai = "*"
+black = "*"
+python-dotenv = "*"
+langchain-community = "*"
+tavily-python = "*"
+langchainhub = "*"
+
+[dev-packages]
+notebook = "*"
+
+[requires]
+python_version = "3.12"
+python_full_version = "3.12.3"

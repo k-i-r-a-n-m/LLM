@@ -1,0 +1,28 @@
+ 
+ Find's the paht of python exe in windows
+ ===================================
+ import sys
+ sys.exec_prefix
+ 
+ 
+
+++++++++++++++
+VirtualEnv
+++++++++++++++
+
+1. pip freeze --local > requirements.txt
+2. source "<path_to_Virtual_environment_folder/activate>" (in Bash)
+3. deactivate
+4. which python (finds where the executable is located)
+5. rm -rf (remove the virtual environment)
+6. virtualenv <Name_of_environment>
+7. pip list
+
+
+
+************************************************
+Pipenv - high level virtual environment manager
+************************************************
+
+1. pipenv shell
+2. 

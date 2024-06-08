@@ -1,0 +1,9 @@
+
+========================
+Package-installed
+========================
+
+1. black - formatting
+2. langchain
+3. langchain-openai
+4. python-doenv

@@ -9,6 +9,10 @@ from langchain import hub
 #New imports related to RAG
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains.retrieval import create_retrieval_chain
+from langchain_core.runnables import RunnablePassthrough
+
+def format_docs(docs):
+    return "\n\n".join(doc.page_content for doc in docs)
 
 load_dotenv()
 if __name__ == "__main__":
@@ -19,44 +23,53 @@ if __name__ == "__main__":
     llm = ChatOpenAI()
     # query = 'who is the author of the medium blog post related to vector database?'
     # query = 'what did Chip Huen quoted'
-    query = 'when was the blog published?'
-    prompt = PromptTemplate.from_template(template=query)
-    chain = prompt | llm
-    result = chain.invoke({})
-    print(result.content)
+    # query = 'when was the blog published?'
+    # prompt = PromptTemplate.from_template(template=query)
+    # chain = prompt | llm
+    # result = chain.invoke({})
+    # print("--------Normal Response without RAG------")
+    # print(result.content)
 
     vectorStore = PineconeVectorStore(embedding=embeddings,index_name=os.environ["INDEX_NAME"])
 
 
-    #Download PROMPT for RETRIEVAL
-    retrieval_prompt = hub.pull('langchain-ai/retrieval-qa-chat')
+    # #Download PROMPT for RETRIEVAL
+    # retrieval_prompt = hub.pull('langchain-ai/retrieval-qa-chat')
+    #
+    # #Format list of document into a prompt and pass to llm
+    # combine_doc_chain = create_stuff_documents_chain(llm,retrieval_prompt)
+    #
+    # #Retrieve data from the VectorStore (Retriver)
+    # retrieval_chain = create_retrieval_chain(retriever=vectorStore.as_retriever(), combine_docs_chain=combine_doc_chain)
+    #
+    # #invoke the retrieval chain
+    # result = retrieval_chain.invoke(input={"input":query})
+    #
+    # print("--------using RAG--------")
+    # print(result["answer"])
 
-    #Format list of document into a prompt and pass to llm
-    combine_doc_chain = create_stuff_documents_chain(llm,retrieval_prompt)
 
-    #Retrieve data from the VectorStore (Retriver)
-    retrieval_chain = create_retrieval_chain(retriever=vectorStore.as_retriever(), combine_docs_chain=combine_doc_chain)
-
-    #invoke the retrieval chain
-    result = retrieval_chain.invoke(input={"input":query})
-
-    print(result["answer"])
-
-
-    # #  Using LCEL to build the RAG chain
-    # template = """
-    #     Use the following pieces of context to answer the question at the end.
-    #     If you don't know the answer, just say that you don't know, don't try to make up an answer.
-    #     Use three sentences maximum and keep the answer as concise as possible. 
-    #     Always say "thanks for asking!" at the end of the answer.
+    #Using LCEL to build the RAG chain without chain constructor (create_stuff_document_chain & create_retrieval_chain)
+    template = """
+        Use the following pieces of context to answer the question at the end.
+        If you don't know the answer, just say that you don't know, don't try to make up an answer.
+        Use three sentences maximum and keep the answer as concise as possible. 
+        Always say "thanks for asking!" at the end of the answer.
       
-    #     {context}
+        {context}
         
-    #     Question:{question}
+        Question:{question}
         
-    #     Helpful Answer:
-    #     """
+        Helpful Answer:
+        """
 
-    # custom_rag_prompt = PromptTemplate.from_template(template=template)
+    custom_rag_prompt = PromptTemplate.from_template(template=template)
 
-    # rag_chain = {"context":vectorStore.as_retriever()}
+    rag_chain = ({"context":vectorStore.as_retriever() | format_docs,"question":RunnablePassthrough()}
+                 | custom_rag_prompt
+                 | llm)
+
+    result = rag_chain.invoke("get me author name")
+    print(dict(result)['content'])
+    print(result.content)
+

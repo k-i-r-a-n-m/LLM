@@ -24,5 +24,57 @@ VirtualEnv
 Pipenv - high level virtual environment manager
 ************************************************
 
-1. pipenv shell
-2. 
+1. pip install pipenv
+2. pipenv install <package_name>
+	--> creates a Pipefile(taml format) , Virtual Environment and Pipfile.lock
+3. pipenv shell  --> activates the vm
+4. exit  --> deactivate the vm
+5. pipenv run python --> run commands without activating the environment
+6. pipenv install -r <PATH-TO-requirements.txt>
+7. **pipenv lock -r  --> list the requirements with versions locked 
+8. pipenv install <package> --dev  --> install package in dev env
+9. pipenv uninstall <package>
+10.pipenv --python 3.6 -->  when you need to recreate vm with different interpreter version
+11.pipenv --rm --> removes the vm
+12.pipenv install --> to create vm from pipfile
+13.pipenv --venv --> gives the path to the vm
+14.pipenv check --> check for security vulnerability
+15.pipenv graph --> list the packages and their dependencies 
+16.pipenv lock 
+	--> use when the project is ready and tested for production
+17.pipenv install --ignore-pipfile
+	--> uses the piplock file to install dependencies
+
+
+
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+		    CONDA (mini)
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+1. conda list
+2. conda env list --> list all the environments
+3. conda create --name <env-name> python=3.7
+4. conda activate <env-name> / source activate <env-name> (old - cmd )
+	--> faster and os independent
+5. conda install <package>
+6. conda deactivate <>
+
+-----------------------
+Conda Package Channels
+-----------------------
+
+1. conda config --show channels
+2. conda install -c <channel> <package>
+3. conda config -add channels <channel_name>
+	--> let's us to install packages using cmd "conda install <package>"
+4. conda config --get channels
+	--> shows priority of the packages channels
+
+
+
+
+
+
+

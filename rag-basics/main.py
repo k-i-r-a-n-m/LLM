@@ -21,32 +21,32 @@ if __name__ == "__main__":
     embeddings = OpenAIEmbeddings()
 
     llm = ChatOpenAI()
-    # query = 'who is the author of the medium blog post related to vector database?'
-    # query = 'what did Chip Huen quoted'
-    # query = 'when was the blog published?'
-    # prompt = PromptTemplate.from_template(template=query)
-    # chain = prompt | llm
-    # result = chain.invoke({})
-    # print("--------Normal Response without RAG------")
-    # print(result.content)
+    query = 'who is the author of the medium blog post related to vector database?'
+    query = 'what did Chip Huen quoted'
+    query = 'when was the blog published?'
+    prompt = PromptTemplate.from_template(template=query)
+    chain = prompt | llm
+    result = chain.invoke({})
+    print("--------Normal Response without RAG------")
+    print(result.content)
 
     vectorStore = PineconeVectorStore(embedding=embeddings,index_name=os.environ["INDEX_NAME"])
 
 
-    # #Download PROMPT for RETRIEVAL
-    # retrieval_prompt = hub.pull('langchain-ai/retrieval-qa-chat')
-    #
-    # #Format list of document into a prompt and pass to llm
-    # combine_doc_chain = create_stuff_documents_chain(llm,retrieval_prompt)
-    #
-    # #Retrieve data from the VectorStore (Retriver)
-    # retrieval_chain = create_retrieval_chain(retriever=vectorStore.as_retriever(), combine_docs_chain=combine_doc_chain)
-    #
-    # #invoke the retrieval chain
-    # result = retrieval_chain.invoke(input={"input":query})
-    #
-    # print("--------using RAG--------")
-    # print(result["answer"])
+    #Download PROMPT for RETRIEVAL
+    retrieval_prompt = hub.pull('langchain-ai/retrieval-qa-chat')
+
+    #Format list of document into a prompt and pass to llm
+    combine_doc_chain = create_stuff_documents_chain(llm,retrieval_prompt)
+
+    #Retrieve data from the VectorStore (Retriver)
+    retrieval_chain = create_retrieval_chain(retriever=vectorStore.as_retriever(), combine_docs_chain=combine_doc_chain)
+
+    #invoke the retrieval chain
+    result = retrieval_chain.invoke(input={"input":query})
+
+    print("--------using RAG--------")
+    print(result["answer"])
 
 
     #Using LCEL to build the RAG chain without chain constructor (create_stuff_document_chain & create_retrieval_chain)

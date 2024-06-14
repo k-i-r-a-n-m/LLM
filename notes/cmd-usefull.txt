@@ -1,0 +1,18 @@
+
+========================
+1.scrap html from web
+========================
+used: doc-assistant
+
+cmd
+----
+# !wget -r -A.html -P langchain-docs https://api.python.langchain.com/en/latest/langchain_api_reference.html
+# without -(!)
+# wget -r --no-parent --html-extension -P langchain-docs <https_link>
+
+
+options:(reference)
+-------------------
+# -r --> recursive retrieving. default depth of 5
+# -A --> recursivly accept <file-format>
+# -P --> Directory prefix (where all other files and subFolders wil be saved). default (.)

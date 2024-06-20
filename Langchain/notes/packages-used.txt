@@ -11,3 +11,14 @@ Package-installed
 6. faiss-cpu
 7. pypdf
 8. langchainhub
+
+
+
+============================
+usefull - sources
+============================
+1.pezzo - open source LLM OPS
+2.streamlit - open source UI builder for data driven apps
+3.langchain-text-splitter-playground - streamlit app for visualizing the document text-splitting
+4.langchain hub -- get predefined prompt from the community
+5.llamaIndex - similar to langchain framework - but mostly data oriented (RAG)

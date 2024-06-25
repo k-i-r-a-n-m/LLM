@@ -75,6 +75,15 @@ This is the end of the message.
 
 """
 
+# message_with_code_block="""
+# This is a message with code block.
+# 1.The code block is below:
+# ```py
+# print("hello docker!")
+# ```
+# the code block ends here
+# """
+
 # Generate a reply for the given code.
 reply = code_executor_agent.generate_reply(messages=[{"role": "user", "content": message_with_code_block}])
 print(reply)

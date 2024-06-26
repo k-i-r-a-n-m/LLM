@@ -4,6 +4,8 @@ from autogen import ConversableAgent
 from dotenv import load_dotenv
 
 from autogen import register_function
+from pprint import pprint as pp
+from typing import Any
 
 
 
@@ -31,15 +33,19 @@ def calculator(a: int, b: int, operator: Annotated[Operator, "operator"]) -> int
     else:
         raise ValueError("Invalid operator")
 
+
 # Let's first define the assistant agent that suggests tool calls.
 assistant = ConversableAgent(
     name="Assistant",
-    system_message="You are a helpful AI assistant. "
-                   "You can help with simple calculations. "
-                   "You execute calculation in correct order"
-                   "Return 'TERMINATE' when the task is done.",
+    system_message='''You are a helpful AI assistant. 
+                   You can help with simple calculations. 
+                   you solve problems step by step by breaking down.
+                   once broken down you can use the given tools to find the right operation to perform.
+                   Return 'TERMINATE' when the task is done.''',
     llm_config=llm_config,
+    human_input_mode="NEVER",
 )
+
 
 # The user proxy agent is used for interacting with the assistant agent
 # and executes tool calls.
@@ -52,13 +58,14 @@ user_proxy = ConversableAgent(
 
 # METHOD:1
 # ======================================
-# # Register the tool signature with the assistant agent.
-# assistant.register_for_llm(name="calculator", description="A simple calculator")(calculator)
-#
-# # Register the tool function with the user proxy agent.
-# user_proxy.register_for_execution(name="calculator")(calculator)
+# Register the tool signature with the assistant agent.
+assistant.register_for_llm(name="calculator", description="A simple calculator")(calculator)
 
+# Register the tool function with the user proxy agent.
+user_proxy.register_for_execution(name="calculator")(calculator)
 
+def add(a:Any,b:Any)->Any:
+    return a+b
 
 # METHOD:2
 # ======================================
@@ -72,6 +79,21 @@ register_function(
 )
 
 
+# Query the Agent to execute the tool
 # chat_result = user_proxy.initiate_chat(assistant, message="What is (44232 + 13312 / ( 232 - 32 )) * 5?")
-chat_result = user_proxy.initiate_chat(assistant, message="What is 2232332332**3")
+chat_result = user_proxy.initiate_chat(assistant, message="what is (1423 - 123) / 3 + (32 + 23) * 5?") # 708
 
+# More complex than the tool
+# chat_result = user_proxy.initiate_chat(assistant, message="what is 2 + 4 / (22 / 6) * 2 ?")
+
+# chat_result = user_proxy.initiate_chat(assistant, message="how are you")
+
+
+# Assistant equipped with tools and the tools are of OPEN-AI's tool API format
+# pp(assistant.llm_config["tools"])
+
+
+# Without the tools the ai is able to breakdown the step and calculate it
+# result = assistant.generate_reply(messages=[{"role": "user", "content": "What is (44232 + 13312 / ( 232 - 32 )) * 5?"}])
+# result = assistant.generate_reply(messages=[{"role": "user", "content": "what is (1423 - 123) / 3 + (32 + 23) * 5?"}])
+# print(result)

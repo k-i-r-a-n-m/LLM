@@ -81,8 +81,10 @@ register_function(
 
 # Query the Agent to execute the tool
 # chat_result = user_proxy.initiate_chat(assistant, message="What is (44232 + 13312 / ( 232 - 32 )) * 5?")
-chat_result = user_proxy.initiate_chat(assistant, message="what is (1423 - 123) / 3 + (32 + 23) * 5?") # 708
-
+chat_result = user_proxy.initiate_chat(assistant,
+                                       message="what is (1423 - 123) / 3 + (32 + 23) * 5?",
+                                       summary_method="reflection_with_llm",) # 708
+print(chat_result.summary)
 # More complex than the tool
 # chat_result = user_proxy.initiate_chat(assistant, message="what is 2 + 4 / (22 / 6) * 2 ?")
 

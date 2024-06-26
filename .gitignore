@@ -132,3 +132,4 @@ dmypy.json
 
 # ignoring specif files
 /doc-assistant/data/langchain-docs-old/
+generated-code/

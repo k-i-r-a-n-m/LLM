@@ -4,9 +4,9 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pyautogen = "*"
 numpy = "*"
 matplotlib = "*"
+pyautogen = {extras = ["autobuild"] }
 
 [dev-packages]
 
